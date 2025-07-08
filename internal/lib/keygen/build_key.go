@@ -21,6 +21,9 @@ const maxLen = 100
 var (
 	// ErrMarshallJSON indicates a failure to marshal a value to JSON.
 	ErrMarshallJSON = fmt.Errorf("error marshalling to JSON")
+
+	// ErrBuildKey indicates a failure to build a cache key from a value.
+	ErrBuildKey = fmt.Errorf("error building cache key")
 )
 
 // BuildKey returns a deterministic string key for caching based on the provided value.
@@ -32,7 +35,11 @@ var (
 func BuildKey(value any) (string, error) {
 	encoded, err := encodeValue(value)
 	if err != nil {
-		return "", err
+		return "", errs.NewError(ErrBuildKey, map[string]interface{}{
+			"operation": "building cache key",
+			"value":     value,
+			"error":     err,
+		})
 	}
 	if len(encoded) > maxLen {
 		// If the concatenated string is too long, hash it to ensure a consistent key

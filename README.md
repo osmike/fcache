@@ -123,7 +123,7 @@ cached := fcache.NewCachedFunction(fn, nil, hooks)
 
 Hooks are always called safely: panics in hooks are caught and forwarded to `LogError` if set, and never propagate to the caller.
 
-#### `NewCachedFunction
+#### `NewCachedFunction`
 Wraps a function with a concurrent-safe caching layer.
 
 ```go
